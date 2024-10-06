@@ -35,14 +35,19 @@
 }
 
 .button.primary {
-  background-color: #e63946; /* Primary button color */
+  background-color: #e63946; 
   color: #fff;
   border: none;
   transition: background-color 0.3s ease;
 }
 
 .button.primary:hover {
-  background-color: #d62828; /* Darker shade on hover */
+  background-color: #d62828; 
+}
+
+.successMessage {
+  color: green; 
+  margin-top: 10px;
 }
 
 @media (max-width: 500px) {

@@ -2,6 +2,7 @@
 import SearchComponent from './SearchComponent';
 import { useState } from 'react';
 import styles from './search.module.css';
+
 const DonorSearchPage = () => {
   const [results, setResults] = useState([]);
 

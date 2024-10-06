@@ -11,7 +11,7 @@ export default function Register() {
     bloodType: '',
     contactNumber: '',
   });
-
+  const [successMessage, setSuccessMessage] = useState(''); 
   const router = useRouter();
 
   const handleSubmit = async (e) => {
@@ -27,8 +27,10 @@ export default function Register() {
     if (data.error) {
       alert(data.error);
     } else {
-      alert(data.message);
-      router.push('/donor-search'); 
+      setSuccessMessage(data.message); 
+      setTimeout(() => {
+        router.push('/donor-search');
+      }, 2000); 
     }
   };
 
@@ -86,6 +88,7 @@ export default function Register() {
           Register
         </button>
       </form>
+      {successMessage && <div className={styles.successMessage}>{successMessage}</div>} 
     </div>
   );
 }

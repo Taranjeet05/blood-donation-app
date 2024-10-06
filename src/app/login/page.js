@@ -9,6 +9,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState(''); 
   const router = useRouter();
 
   const handleSubmit = async (e) => {
@@ -20,7 +21,10 @@ const LoginPage = () => {
     });
 
     if (res?.ok) {
-      router.push('/donor-search'); 
+      setSuccessMessage('Successfully logged in!');
+      setTimeout(() => {
+        router.push('/donor-search');
+      }, 2000); 
     } else {
       setError(res?.error || 'Invalid credentials'); 
     }
@@ -31,7 +35,9 @@ const LoginPage = () => {
       <form className={styles.form} onSubmit={handleSubmit}>
         <h2 className={styles.title}>Login</h2>
         
-        {error && <div className={styles.error}>{error}</div>} {/* Error message */}
+        {error && <div className={styles.error}>{error}</div>} 
+        
+        {successMessage && <div className={styles.successMessage}>{successMessage}</div>} 
 
         <input
           type="email"
