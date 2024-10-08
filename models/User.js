@@ -22,6 +22,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  donations: [
+    {
+      donationDate: { type: Date },
+      hospital: { type: String },
+      amount: { type: Number },
+    }
+  ], 
 });
 
 export default mongoose.models.User || mongoose.model('User', userSchema);
