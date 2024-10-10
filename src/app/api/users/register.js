@@ -1,5 +1,5 @@
 import { hash } from 'bcryptjs';
-import connectMongo from '../../../../lib/mongodb';
+import dbConnent from '../../../../lib/connect';
 import User from '../../../../models/User';
 import { z } from 'zod';
 
@@ -14,7 +14,7 @@ const registerSchema = z.object({
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
-      await connectMongo();
+      await dbConnent();
 
       const parsedData = registerSchema.parse(req.body);
 

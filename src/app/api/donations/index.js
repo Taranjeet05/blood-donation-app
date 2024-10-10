@@ -1,9 +1,9 @@
-import connectMongo from '../../../../lib/mongodb';
+import dbConnent from '../../../../lib/connect';
 import Donation from '../../../../models/Donation';
 import { getSession } from 'next-auth/react';
 
 export default async function handler(req, res) {
-  await connectMongo();
+  await dbConnent();
   const session = await getSession({ req });
 
   if (!session) {

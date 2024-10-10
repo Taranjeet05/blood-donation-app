@@ -1,11 +1,11 @@
-import connectMongo from '../../../../lib/mongodb';
+import dbConnent from '../../../../lib/connect';
 import User from '../../../../models/User';
 import { getSession } from 'next-auth/react';
 
 export default async function handler(req, res) {
   if (req.method === 'GET') {
     try {
-      await connectMongo();
+      await dbConnent();
       const session = await getSession({ req });
       if (!session) return res.status(401).json({ error: 'Unauthorized' });
 
@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     }
   } else if (req.method === 'PUT') {
     try {
-      await connectMongo();
+      await dbConnent();
       const session = await getSession({ req });
       if (!session) return res.status(401).json({ error: 'Unauthorized' });
 
