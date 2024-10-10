@@ -1,16 +1,16 @@
-import { connectToDatabase } from '../../../lib/mongodb'; // Ensure this is your MongoDB connection function
+import { connectToDatabase } from '../../../lib/mongodb'; 
 import { ObjectId } from 'mongodb';
 
 export default async function handler(req, res) {
   const { method } = req;
 
-  // Connect to the database
+  
   const db = await connectToDatabase();
-  const notificationsCollection = db.collection('notifications'); // Ensure you have a notifications collection
+  const notificationsCollection = db.collection('notifications'); 
 
   switch (method) {
     case 'GET':
-      // Fetch notifications
+      
       try {
         const notifications = await notificationsCollection.find({}).toArray();
         res.status(200).json(notifications);
@@ -20,9 +20,9 @@ export default async function handler(req, res) {
       break;
 
     case 'POST':
-      // Create a new notification
+      
       try {
-        const { message, userId } = req.body; // assuming these are sent in the body
+        const { message, userId } = req.body; 
         const newNotification = {
           message,
           userId: ObjectId(userId),
@@ -37,9 +37,9 @@ export default async function handler(req, res) {
       break;
 
     case 'DELETE':
-      // Delete a notification by id
+      
       try {
-        const { id } = req.query; // assuming id is passed in query params
+        const { id } = req.query; 
         await notificationsCollection.deleteOne({ _id: ObjectId(id) });
         res.status(204).end();
       } catch (error) {

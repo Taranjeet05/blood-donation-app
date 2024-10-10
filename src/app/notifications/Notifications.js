@@ -1,8 +1,8 @@
-// Mark this component as a Client Component
+
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import styles from './Notifications.module.css'; // Import the CSS module
+import styles from './Notifications.module.css'; 
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
