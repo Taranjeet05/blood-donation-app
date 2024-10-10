@@ -12,15 +12,15 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: false, 
   },
   bloodType: {
     type: String,
-    required: true,
+    required: false, 
   },
   contactNumber: {
     type: String,
-    required: true,
+    required: false, 
   },
   donations: [
     {
@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
       hospital: { type: String },
       amount: { type: Number },
     }
-  ], 
+  ],
 });
 
 export default mongoose.models.User || mongoose.model('User', userSchema);

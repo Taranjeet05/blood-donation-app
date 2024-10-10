@@ -1,29 +1,45 @@
-import dbConnect from '../../../../lib/mongodb';
-import Donor from '../../../../models/'; // Assuming you have a Donor model
+"use client";
+import SearchComponent from './SearchComponent';
+import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+import styles from './search.module.css';
+import { useRouter } from 'next/router';
 
-export default async function handler(req, res) {
-  await dbConnect();
+const DonorSearchPage = () => {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [results, setResults] = useState([]);
 
-  const { bloodType, location, urgency } = req.query;
+  useEffect(() => {
+    if (status === "loading") return; 
+    if (!session) {
+      
+      router.push('/api/auth/signin');
+    }
+  }, [session, status, router]);
 
-  let filter = {};
+  const handleSearch = async (searchCriteria) => {
+    const response = await fetch(`/api/donors/search?${new URLSearchParams(searchCriteria)}`);
+    const data = await response.json();
+    setResults(data);
+  };
 
-  if (bloodType) {
-    filter.bloodType = bloodType;
-  }
+  return (
+    <div className={styles.searchPageContainer}>
+      <SearchComponent onSearch={handleSearch} />
+      <h2 className={styles.heading}>Search Results</h2> 
+      <div className={styles.resultsContainer}>
+        {results.map((donor) => (
+          <div key={donor._id} className={styles.donorCard}>
+            <h3>{donor.name}</h3>
+            <p>Blood Type: {donor.bloodType}</p>
+            <p>Location: {donor.location}</p>
+            <p>Urgency: {donor.urgency}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
-  if (location) {
-    filter.location = { $regex: location, $options: 'i' }; // Case-insensitive search
-  }
-
-  if (urgency) {
-    filter.urgency = urgency;
-  }
-
-  try {
-    const donors = await Donor.find(filter);
-    res.status(200).json(donors);
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching donors' });
-  }
-}
+export default DonorSearchPage;
