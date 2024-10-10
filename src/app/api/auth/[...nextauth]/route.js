@@ -1,13 +1,10 @@
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import clientPromise from "../../../../../lib/mongodb";
 import User from "../../../../../models/User"; 
 import dbConnect from "../../../../../lib/connect";
 
 export const authOptions = {
-  adapter: MongoDBAdapter(clientPromise),
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID,
@@ -22,14 +19,14 @@ export const authOptions = {
 
   callbacks: {
     async signIn({ user, account, profile }) {
-      console.log('-------------------------------------------------Sign-in:', user);
+      console.log('-------------------------------------------------Sign-in:', user, account);
       await dbConnect();
       try {
         const existingUser = await User.findOne({ email: user.email });
         console.log('Existing User:', existingUser);
         if (!existingUser) {
           
-          const newUser = await User.create({
+          await User.create({
             name: user.name || profile.name,
             email: user.email,
             password: "", 
@@ -45,6 +42,7 @@ export const authOptions = {
     },
     async session({ session, token }) {
       session.user.id = token.sub; 
+
       return session;
     },
   },
