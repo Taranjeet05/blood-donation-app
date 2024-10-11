@@ -9,8 +9,9 @@ export default function AuthErrorPage() {
       <div>
         <h1>Account Not Linked</h1>
         <p>
-          It looks like you tried to sign in with a provider that isn't linked to your existing account.
+          {`It looks like you tried to sign in with a provider that isn't linked to your existing account.`}
         </p>
+
         <a href="/api/auth/signin">Sign in with a different account</a>
       </div>
     );
