@@ -2,7 +2,7 @@ import dbConnect from '../../../../../lib/connect';
 import User from '../../../../../models/User';        
 import { getServerSession } from 'next-auth';      
 
-export async function PUT(req) {
+export async function GET(req) {
     try {
         await dbConnect();
 
@@ -14,21 +14,15 @@ export async function PUT(req) {
             });
         }
 
-        const { bloodType, contactNumber } = await req.json();
+        const user = await User.findOne({ email: session.user.email });
 
-        const updatedUser = await User.findOneAndUpdate(
-            { email: session.user.email },  
-            { bloodType, contactNumber },   
-            { new: true }                  
-        );
-
-        if (!updatedUser) {
+        if (!user) {
             return new Response(JSON.stringify({ error: 'User not found' }), {
                 status: 404,
             });
         }
 
-        return new Response(JSON.stringify(updatedUser), {
+        return new Response(JSON.stringify(user), {
             status: 200,
         });
     } catch (error) {
@@ -36,4 +30,4 @@ export async function PUT(req) {
             status: 500,
         });
     }
-} 
+}
