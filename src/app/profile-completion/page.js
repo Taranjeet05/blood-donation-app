@@ -10,32 +10,21 @@ const ProfileCompletion = () => {
     const router = useRouter();  
     const [bloodType, setBloodType] = useState('');
     const [contactNumber, setContactNumber] = useState('');
-    const [loading, setLoading] = useState(true); 
-    const [profileComplete, setProfileComplete] = useState(false); 
+    const [profileComplete, setProfileComplete] = useState(false);
 
     useEffect(() => {
-        const fetchUserProfile = async () => {
+        const checkProfileCompletion = async () => {
             const response = await fetch('/api/users/profile');
-            if (response.ok) {
-                const userData = await response.json();
-                if (userData.bloodType && userData.contactNumber) {
-                    setProfileComplete(true);
-                    router.push('/donor-search');
-                } else {
-                    setLoading(false);
-                }
-            } else {
-                console.error('Failed to fetch user profile');
-                setLoading(false); 
+            const userData = await response.json();
+
+            if (userData.bloodType && userData.contactNumber) {
+                setProfileComplete(true);
+                router.push('/donor-search');  
             }
         };
 
-        if (session) {
-            fetchUserProfile();
-        } else {
-            setLoading(false); 
-        }
-    }, [session, router]);
+        checkProfileCompletion();
+    }, [router]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -52,19 +41,17 @@ const ProfileCompletion = () => {
         });
 
         if (response.ok) {
+            setProfileComplete(true); 
             router.push('/donor-search');  
         } else {
             console.error('Failed to update profile');
         }
     };
 
-    if (loading) {
-        return <div>Loading...</div>; 
-    }
-
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>Complete Your Profile</h1>
+            {profileComplete && <p>Your profile is complete! Redirecting...</p>}
             <form className={styles.form} onSubmit={handleSubmit}>
                 <label className={styles.label}>
                     Blood Type:
