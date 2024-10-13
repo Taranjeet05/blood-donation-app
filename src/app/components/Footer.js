@@ -9,6 +9,7 @@ const Footer = () => {
           <li><Link href="/donor-search">Donor Search</Link></li>
           <li><Link href="/notifications">Notifications</Link></li>
           <li><Link href="/donation-tracking">Donation Tracking</Link></li>
+          <li><Link href="/request">Request Blood</Link></li> 
           <li><Link href="/profile">Profile</Link></li>
         </ul>
       </nav>
