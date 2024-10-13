@@ -7,14 +7,14 @@ import styles from './profile-completion.module.css';
 
 const ProfileCompletion = () => {
     const { data: session } = useSession();
-    const navigate = useRouter(); 
+    const router = useRouter();  
     const [bloodType, setBloodType] = useState('');
     const [contactNumber, setContactNumber] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await fetch('/api/users/profile', {
+        const response = await fetch('/api/users/profile-completion', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ const ProfileCompletion = () => {
         });
 
         if (response.ok) {
-            navigate('/donor-search'); 
+            router.push('/donor-search');  
         } else {
             console.error('Failed to update profile');
         }
