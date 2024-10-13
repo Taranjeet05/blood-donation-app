@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation'; 
 import styles from './profile-completion.module.css'; 
@@ -10,6 +10,32 @@ const ProfileCompletion = () => {
     const router = useRouter();  
     const [bloodType, setBloodType] = useState('');
     const [contactNumber, setContactNumber] = useState('');
+    const [loading, setLoading] = useState(true); 
+    const [profileComplete, setProfileComplete] = useState(false); 
+
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            const response = await fetch('/api/users/profile');
+            if (response.ok) {
+                const userData = await response.json();
+                if (userData.bloodType && userData.contactNumber) {
+                    setProfileComplete(true);
+                    router.push('/donor-search');
+                } else {
+                    setLoading(false);
+                }
+            } else {
+                console.error('Failed to fetch user profile');
+                setLoading(false); 
+            }
+        };
+
+        if (session) {
+            fetchUserProfile();
+        } else {
+            setLoading(false); 
+        }
+    }, [session, router]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -31,6 +57,10 @@ const ProfileCompletion = () => {
             console.error('Failed to update profile');
         }
     };
+
+    if (loading) {
+        return <div>Loading...</div>; 
+    }
 
     return (
         <div className={styles.container}>
