@@ -5,6 +5,7 @@ const BloodRequestForm = () => {
   const [requesterName, setRequesterName] = useState('');
   const [relation, setRelation] = useState('');
   const [bloodType, setBloodType] = useState('');
+  const [location, setLocation] = useState('');
   const [urgency, setUrgency] = useState('');
   const [message, setMessage] = useState('');
   const [notification, setNotification] = useState('');
@@ -28,13 +29,18 @@ const BloodRequestForm = () => {
     { value: 'Low', label: 'Low' },
   ];
 
+  const germanCities = [
+    'Berlin', 'Hamburg', 'Munich', 'Cologne', 'Frankfurt', 'Stuttgart', 'Düsseldorf', 'Dortmund', 'Essen', 
+    'Leipzig', 'Bremen', 'Dresden', 'Hannover', 'Nuremberg', 'Mannheim',
+  ];
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const response = await fetch('/api/blood-requests', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ requesterName, relation, bloodType, urgency, message }),
+      body: JSON.stringify({ requesterName, relation, bloodType, location, urgency, message }),
     });
 
     const data = await response.json();
@@ -44,8 +50,11 @@ const BloodRequestForm = () => {
       setRequesterName('');
       setRelation('');
       setBloodType('');
+      setLocation('');
       setUrgency('');
       setMessage('');
+
+      setTimeout(() => setNotification(''), 3000); 
     }
   };
 
@@ -61,6 +70,8 @@ const BloodRequestForm = () => {
           onChange={(e) => setRequesterName(e.target.value)}
           required
         />
+
+        {/* Relation Dropdown */}
         <select className={styles.select} value={relation} onChange={(e) => setRelation(e.target.value)} required>
           <option value="">Select Relation</option>
           <option value="Self">Self</option>
@@ -68,6 +79,8 @@ const BloodRequestForm = () => {
           <option value="Friend">Friend</option>
           <option value="Other">Other</option>
         </select>
+
+        {/* Blood Type Dropdown */}
         <select className={styles.select} value={bloodType} onChange={(e) => setBloodType(e.target.value)} required>
           {bloodTypes.map((blood) => (
             <option key={blood.value} value={blood.value}>
@@ -75,6 +88,18 @@ const BloodRequestForm = () => {
             </option>
           ))}
         </select>
+
+        {/* Location Dropdown */}
+        <select className={styles.select} value={location} onChange={(e) => setLocation(e.target.value)} required>
+          <option value="">Select Location</option>
+          {germanCities.map((city) => (
+            <option key={city} value={city}>
+              {city}
+            </option>
+          ))}
+        </select>
+
+        {/* Urgency Dropdown */}
         <select className={styles.select} value={urgency} onChange={(e) => setUrgency(e.target.value)} required>
           {urgencyLevels.map((level) => (
             <option key={level.value} value={level.value}>
@@ -82,12 +107,14 @@ const BloodRequestForm = () => {
             </option>
           ))}
         </select>
+
         <textarea
           className={styles.textarea}
           placeholder="Message (optional)"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
+
         <button className={styles.button} type="submit">Request Blood</button>
       </form>
     </div>

@@ -1,11 +1,11 @@
 import dbConnect from '../../../../lib/connect'; 
-import BloodRequest from '../../../models/BloodRequest';
+import BloodRequest from '../../../../models/BloodRequest';
 
 export async function POST(req) {
   try {
     await dbConnect();
     
-    const { requesterName, relation, bloodType, urgency, message } = await req.json();
+    const { requesterName, relation, bloodType, urgency, message, location } = await req.json();
     
     const newRequest = new BloodRequest({
       requesterName,
@@ -13,6 +13,7 @@ export async function POST(req) {
       bloodType,
       urgency,
       message,
+      location,  
     });
 
     await newRequest.save();

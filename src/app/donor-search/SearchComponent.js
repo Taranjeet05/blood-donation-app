@@ -1,26 +1,25 @@
 import { useState } from 'react';
-import styles from './search.module.css'; 
+import styles from './search.module.css';
 
 const SearchComponent = ({ onSearch }) => {
   const [bloodType, setBloodType] = useState('');
   const [location, setLocation] = useState('');
   const [urgency, setUrgency] = useState('');
 
-  const handleSearch = () => {
+  const germanCities = [
+    'Berlin', 'Hamburg', 'Munich', 'Cologne', 'Frankfurt', 'Stuttgart', 'Düsseldorf', 'Dortmund', 'Essen',
+    'Leipzig', 'Bremen', 'Dresden', 'Hannover', 'Nuremberg', 'Mannheim',
+  ];
+
+  const handleSearch = (e) => {
+    e.preventDefault();
     onSearch({ bloodType, location, urgency });
   };
 
   return (
-    <div className={styles.searchPageContainer}>
-      <h2>Search for Donors</h2>
-
+    <form className={styles.searchForm} onSubmit={handleSearch}>
       {/* Blood Type Dropdown */}
-      <label className={styles.label}>Blood Type:</label>
-      <select 
-        className={styles.input} 
-        value={bloodType} 
-        onChange={(e) => setBloodType(e.target.value)}
-      >
+      <select className={styles.select} value={bloodType} onChange={(e) => setBloodType(e.target.value)}>
         <option value="">Select Blood Type</option>
         <option value="A+">A+</option>
         <option value="A-">A-</option>
@@ -32,33 +31,26 @@ const SearchComponent = ({ onSearch }) => {
         <option value="O-">O-</option>
       </select>
 
-      {/* Location Input */}
-      <label className={styles.label}>Location:</label>
-      <input
-        className={styles.input}
-        type="text"
-        placeholder="Location"
-        value={location}
-        onChange={(e) => setLocation(e.target.value)}
-      />
+      {/* Location Dropdown */}
+      <select className={styles.select} value={location} onChange={(e) => setLocation(e.target.value)}>
+        <option value="">Select Location</option>
+        {germanCities.map((city) => (
+          <option key={city} value={city}>
+            {city}
+          </option>
+        ))}
+      </select>
 
       {/* Urgency Dropdown */}
-      <label className={styles.label}>Urgency:</label>
-      <select 
-        className={styles.input} 
-        value={urgency} 
-        onChange={(e) => setUrgency(e.target.value)}
-      >
+      <select className={styles.select} value={urgency} onChange={(e) => setUrgency(e.target.value)}>
         <option value="">Select Urgency</option>
         <option value="Low">Low</option>
         <option value="Medium">Medium</option>
         <option value="High">High</option>
       </select>
 
-      <button className={`${styles.button} primary`} onClick={handleSearch}>
-        Search
-      </button>
-    </div>
+      <button className={styles.button} type="submit">Search</button>
+    </form>
   );
 };
 
