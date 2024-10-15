@@ -1,12 +1,13 @@
-import dbConnect from '../../../../../lib/connect'; 
+import dbConnect from '../../../../../lib/connect';
 import BloodRequest from '../../../../../models/BloodRequest';
 
 export async function DELETE(req, { params }) {
   try {
     await dbConnect();
-    const { id } = params; 
+    const { id } = params;  
     
-    await BloodRequest.findByIdAndDelete(id);
+    await BloodRequest.findByIdAndDelete(id); 
+
     return new Response(JSON.stringify({ success: true, message: 'Blood request deleted successfully!' }), { status: 200 });
   } catch (error) {
     return new Response(JSON.stringify({ success: false, message: error.message }), { status: 500 });

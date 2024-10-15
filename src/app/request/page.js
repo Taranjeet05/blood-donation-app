@@ -24,10 +24,9 @@ const RequestPage = () => {
   };
 
   const handleDelete = async (id) => {
-    const response = await fetch('/api/blood-requests', {
+    const response = await fetch(`/api/blood-requests/${id}`, {  
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
     });
     const data = await response.json();
     if (data.success) {
