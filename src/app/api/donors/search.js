@@ -1,45 +1,20 @@
-"use client";
-import SearchComponent from './SearchComponent';
-import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
-import styles from './search.module.css';
-import { useRouter } from 'next/router';
+import dbConnect from '../../../../lib/connect';
+import BloodRequest from '../../../../models';
 
-const DonorSearchPage = () => {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-  const [results, setResults] = useState([]);
+export default async function handler(req, res) {
+  await dbConnect();
 
-  useEffect(() => {
-    if (status === "loading") return; 
-    if (!session) {
-      
-      router.push('/api/auth/signin');
-    }
-  }, [session, status, router]);
+  const { bloodType, location, urgency } = req.query;
 
-  const handleSearch = async (searchCriteria) => {
-    const response = await fetch(`/api/donors/search?${new URLSearchParams(searchCriteria)}`);
-    const data = await response.json();
-    setResults(data);
-  };
+  const filters = {};
+  if (bloodType) filters.bloodType = bloodType;
+  if (location) filters.location = location;
+  if (urgency) filters.urgency = urgency;
 
-  return (
-    <div className={styles.searchPageContainer}>
-      <SearchComponent onSearch={handleSearch} />
-      <h2 className={styles.heading}>Search Results</h2> 
-      <div className={styles.resultsContainer}>
-        {results.map((donor) => (
-          <div key={donor._id} className={styles.donorCard}>
-            <h3>{donor.name}</h3>
-            <p>Blood Type: {donor.bloodType}</p>
-            <p>Location: {donor.location}</p>
-            <p>Urgency: {donor.urgency}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-export default DonorSearchPage;
+  try {
+    const bloodRequests = await BloodRequest.find(filters);
+    res.status(200).json(bloodRequests);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching blood requests', error });
+  }
+}
