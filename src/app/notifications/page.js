@@ -1,5 +1,5 @@
 import React from 'react';
-import Notifications from '../notifications/Notifications'; 
+import Notifications from './Notifications'; 
 
 const NotificationsPage = () => {
   return (
