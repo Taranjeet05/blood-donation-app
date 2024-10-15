@@ -1,10 +1,28 @@
 "use client";
 import SearchComponent from './SearchComponent';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './search.module.css';
+import BloodRequestCard from '../components/BloodRequestCard';
 
 const DonorSearchPage = () => {
   const [results, setResults] = useState([]);
+  const [userEmail, setUserEmail] = useState(null);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await fetch('/api/users/profile');
+        if (response.ok) {
+          const userProfile = await response.json();
+          setUserEmail(userProfile.email); 
+        }
+      } catch (error) {
+        console.error('Profile fetch error:', error.message);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   const handleSearch = async (searchCriteria) => {
     try {
@@ -15,12 +33,7 @@ const DonorSearchPage = () => {
       }
 
       const data = await response.json();
-
-      if (Array.isArray(data)) {
-        setResults(data);
-      } else {
-        setResults([]);
-      }
+      setResults(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Fetch error:', error.message);
       setResults([]);
@@ -34,12 +47,11 @@ const DonorSearchPage = () => {
       <div className={styles.resultsContainer}>
         {results.length > 0 ? (
           results.map((donor) => (
-            <div key={donor._id} className={styles.donorCard}>
-              <h3>{donor.requesterName}</h3>
-              <p>Blood Type: {donor.bloodType}</p>
-              <p>Location: {donor.location}</p>
-              <p>Urgency: {donor.urgency}</p>
-            </div>
+            <BloodRequestCard 
+              key={donor._id} 
+              request={donor} 
+              userEmail={userEmail}  
+            />
           ))
         ) : (
           <p>No blood requests found.</p>

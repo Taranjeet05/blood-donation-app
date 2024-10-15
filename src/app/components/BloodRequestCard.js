@@ -1,19 +1,13 @@
+"use client";
 import React, { useState } from 'react';
 import styles from './BloodRequestCard.module.css';
+import Link from 'next/link';  
 
-const BloodRequestCard = ({ request, onDelete, onEdit }) => {
+const BloodRequestCard = ({ request, userEmail, onDelete, onEdit }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDetails = () => {
     setIsOpen(!isOpen);
-  };
-
-  const handleDelete = () => {
-    onDelete(request._id);
-  };
-
-  const handleEdit = () => {
-    onEdit(request); 
   };
 
   return (
@@ -27,8 +21,19 @@ const BloodRequestCard = ({ request, onDelete, onEdit }) => {
           <p><strong>Location:</strong> {request.location}</p>
           <p><strong>Urgency:</strong> {request.urgency}</p>
           <p><strong>Message:</strong> {request.message}</p>
-          <button className={styles.button} onClick={handleDelete}>Delete Request</button>
-          <button className={styles.button} onClick={handleEdit}>Edit Request</button> 
+
+          {userEmail && request.email !== userEmail && (
+            <Link href={`/appointment-selection?requestId=${request._id}&urgency=${request.urgency}`} passHref>
+              <button className={styles.button}>Donate</button>
+            </Link>
+          )}
+
+          {userEmail && request.email === userEmail && (
+            <>
+              <button className={styles.button} onClick={() => onDelete(request._id)}>Delete Request</button>
+              <button className={styles.button} onClick={() => onEdit(request)}>Edit Request</button>
+            </>
+          )}
         </div>
       )}
     </div>
