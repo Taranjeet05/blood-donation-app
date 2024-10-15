@@ -23,3 +23,28 @@ export async function POST(req) {
     return new Response(JSON.stringify({ success: false, message: error.message }), { status: 500 });
   }
 }
+
+export async function GET() {
+  try {
+    await dbConnect();
+    
+    const requests = await BloodRequest.find({});
+    
+    return new Response(JSON.stringify({ success: true, requests }), { status: 200 });
+  } catch (error) {
+    return new Response(JSON.stringify({ success: false, message: error.message }), { status: 500 });
+  }
+}
+
+export async function DELETE(req) {
+  try {
+    await dbConnect();
+    const { id } = await req.json();
+    
+    await BloodRequest.findByIdAndDelete(id);
+
+    return new Response(JSON.stringify({ success: true, message: 'Blood request deleted successfully!' }), { status: 200 });
+  } catch (error) {
+    return new Response(JSON.stringify({ success: false, message: error.message }), { status: 500 });
+  }
+}
