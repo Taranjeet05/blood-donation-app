@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './BloodRequestCard.module.css';
 
-const BloodRequestCard = ({ request, onDelete }) => {
+const BloodRequestCard = ({ request, onDelete, onEdit }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDetails = () => {
@@ -10,6 +10,10 @@ const BloodRequestCard = ({ request, onDelete }) => {
 
   const handleDelete = () => {
     onDelete(request._id);
+  };
+
+  const handleEdit = () => {
+    onEdit(request); 
   };
 
   return (
@@ -24,7 +28,7 @@ const BloodRequestCard = ({ request, onDelete }) => {
           <p><strong>Urgency:</strong> {request.urgency}</p>
           <p><strong>Message:</strong> {request.message}</p>
           <button className={styles.button} onClick={handleDelete}>Delete Request</button>
-          <button className={styles.button}>Edit Request</button> 
+          <button className={styles.button} onClick={handleEdit}>Edit Request</button> 
         </div>
       )}
     </div>
