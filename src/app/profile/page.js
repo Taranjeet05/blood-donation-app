@@ -1,13 +1,15 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react'; 
 import styles from './profile.module.css';
+import { useRouter } from 'next/navigation'; 
 
 export default function Profile() {
     const { data: session, status } = useSession();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const router = useRouter(); 
 
     useEffect(() => {
         if (session) {
@@ -32,6 +34,11 @@ export default function Profile() {
         }
     }, [session]);
 
+    const handleLogout = async () => {
+        await signOut({ redirect: false }); 
+        router.push('/'); 
+    };
+
     if (status === 'loading') {
         return <p>Loading...</p>;
     }
@@ -52,6 +59,9 @@ export default function Profile() {
                     <p className={styles.text}>Email: {user?.email}</p>
                     <p className={styles.text}>Blood Type: {user?.bloodType}</p>
                     <p className={styles.text}>Contact Number: {user?.contactNumber}</p>
+                    <button onClick={handleLogout} className={styles.logoutButton}>
+                        Logout
+                    </button>
                 </>
             ) : (
                 <p className={styles.noSession}>You are not logged in.</p>

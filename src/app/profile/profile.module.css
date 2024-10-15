@@ -25,6 +25,22 @@
   font-size: 20px;
 }
 
+.logoutButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #ff4d4d; 
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.logoutButton:hover {
+  background-color: #ff1a1a; 
+}
+
+
 @media (max-width: 500px) {
   .container {
     width: 90%;
