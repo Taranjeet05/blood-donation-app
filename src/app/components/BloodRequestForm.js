@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import styles from '../request/request.module.css'; 
+import styles from '../request/request.module.css';
 
-const BloodRequestForm = () => {
+const BloodRequestForm = ({ onRequestSuccess }) => {  
   const [requesterName, setRequesterName] = useState('');
   const [relation, setRelation] = useState('');
   const [bloodType, setBloodType] = useState('');
@@ -47,6 +47,8 @@ const BloodRequestForm = () => {
     setNotification(data.message);
 
     if (data.success) {
+      onRequestSuccess({ requesterName, bloodType, location, urgency });
+
       setRequesterName('');
       setRelation('');
       setBloodType('');
