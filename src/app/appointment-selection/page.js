@@ -72,11 +72,9 @@ const AppointmentSelectionPage = () => {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
 
-      
       const result = await response.json();
       console.log('Appointment confirmed:', result);
       alert('Appointment confirmed successfully!');
-      
       router.push('/donor-search'); 
     } catch (error) {
       console.error('Error saving appointment:', error);

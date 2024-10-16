@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from 'react';
 import styles from './Notifications.module.css'; 
 
@@ -15,9 +14,9 @@ const Notifications = () => {
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
         setNotifications(data);
-        setLoading(false);
       } catch (error) {
         setError(error.message);
+      } finally {
         setLoading(false);
       }
     };
@@ -36,18 +35,15 @@ const Notifications = () => {
         {notifications.length > 0 ? (
           notifications.map((notification) => (
             <li key={notification._id} className={styles.notificationItem}>
-              <span className={styles.notificationMessage}>{notification.message}</span>
-              <span className={styles.notificationTime}>
-                {new Date(notification.createdAt).toLocaleString()}
-              </span>
+              {notification.message} - {new Date(notification.createdAt).toLocaleString()}
             </li>
           ))
         ) : (
-          <li>No notifications available.</li>
+          <li>No notifications found.</li>
         )}
       </ul>
     </div>
   );
 };
 
-export default Notifications;
+export default Notifications; 

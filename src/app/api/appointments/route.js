@@ -1,30 +1,25 @@
-import { connectToDatabase } from '../../../../lib/connect'; 
-import Appointment from '../../../../models/Appointment'; 
+import dbConnect from '../../../../lib/connect';
+import Appointment from '../../../../models/Appointment';
+import Notification from '../../../../models/Notification'; 
 
-export async function POST(request) {
-  const { requestId, selectedDate, userEmail } = await request.json();
+export async function POST(req) {
+    try {
+        await dbConnect(); 
 
-  try {
-    await connectToDatabase(); 
+        const appointmentData = await req.json(); 
 
-    const newAppointment = new Appointment({
-      requestId,
-      selectedDate,
-      userEmail,
-      createdAt: new Date(),
-    });
+        const newAppointment = await Appointment.create(appointmentData);
 
-    await newAppointment.save();
+        const notificationMessage = {
+            message: `New appointment created for ${newAppointment.name} on ${newAppointment.date}`,
+            createdAt: new Date(),
+        };
 
-    return new Response(JSON.stringify({ message: 'Appointment saved successfully!' }), {
-      status: 201,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  } catch (error) {
-    console.error('Error saving appointment:', error);
-    return new Response(JSON.stringify({ error: 'Failed to save appointment' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
+        await Notification.create(notificationMessage);
+
+        return new Response(JSON.stringify(newAppointment), { status: 201 });
+    } catch (error) {
+        console.error("Error saving appointment:", error); 
+        return new Response(JSON.stringify({ success: false, message: error.message }), { status: 500 });
+    }
 }

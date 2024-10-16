@@ -7,6 +7,7 @@ import BloodRequestCard from '../components/BloodRequestCard';
 const DonorSearchPage = () => {
   const [results, setResults] = useState([]);
   const [userEmail, setUserEmail] = useState(null);
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -14,10 +15,12 @@ const DonorSearchPage = () => {
         const response = await fetch('/api/users/profile');
         if (response.ok) {
           const userProfile = await response.json();
-          setUserEmail(userProfile.email); 
+          setUserEmail(userProfile.email);
         }
       } catch (error) {
         console.error('Profile fetch error:', error.message);
+      } finally {
+        setLoading(false); 
       }
     };
 
@@ -25,6 +28,7 @@ const DonorSearchPage = () => {
   }, []);
 
   const handleSearch = async (searchCriteria) => {
+    setLoading(true); 
     try {
       const response = await fetch(`/api/blood-requests/search?${new URLSearchParams(searchCriteria)}`);
 
@@ -37,6 +41,8 @@ const DonorSearchPage = () => {
     } catch (error) {
       console.error('Fetch error:', error.message);
       setResults([]);
+    } finally {
+      setLoading(false); 
     }
   };
 
@@ -45,7 +51,9 @@ const DonorSearchPage = () => {
       <SearchComponent onSearch={handleSearch} />
       <h2 className={styles.heading}>Search Results</h2>
       <div className={styles.resultsContainer}>
-        {results.length > 0 ? (
+        {loading ? ( 
+          <p>Loading...</p>
+        ) : results.length > 0 ? (
           results.map((donor) => (
             <BloodRequestCard 
               key={donor._id} 
