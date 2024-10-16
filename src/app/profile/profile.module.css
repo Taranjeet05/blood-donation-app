@@ -1,48 +1,68 @@
 .container {
-  max-width: 400px;
+  max-width: 450px; 
   margin: 50px auto;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f7f7f7;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background-color: #ffffff; 
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease; 
+}
+
+.container:hover {
+  transform: translateY(-3px); 
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.15);
 }
 
 .title {
-  font-size: 24px;
-  color: #333;
+  font-size: 28px;
+  color: #333; 
   margin-bottom: 20px;
+  text-align: center;
+}
+
+.infoContainer {
+  background-color: #f9f9f9; 
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .text {
   font-size: 18px;
-  color: #555;
+  color: #555; 
   margin-bottom: 10px;
 }
 
 .noSession {
-  color: #e63946;
+  color: #e63946; 
   font-size: 20px;
+  text-align: center; 
 }
 
 .logoutButton {
   margin-top: 20px;
-  padding: 10px 20px;
+  padding: 12px 20px;
   background-color: #ff4d4d; 
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s; 
+  font-size: 16px; 
 }
 
 .logoutButton:hover {
   background-color: #ff1a1a; 
+  transform: scale(1.05); 
 }
 
+.loadingText, .errorText {
+  text-align: center; 
+  font-size: 18px; 
+  color: #666; 
+}
 
 @media (max-width: 500px) {
   .container {
-    width: 90%;
+    width: 90%; 
   }
 }

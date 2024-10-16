@@ -40,15 +40,15 @@ export default function Profile() {
     };
 
     if (status === 'loading') {
-        return <p>Loading...</p>;
+        return <p className={styles.loadingText}>Loading...</p>;
     }
 
     if (loading) {
-        return <p>Loading user data...</p>;
+        return <p className={styles.loadingText}>Loading user data...</p>;
     }
 
     if (error) {
-        return <p>Error: {error}</p>;
+        return <p className={styles.errorText}>Error: {error}</p>;
     }
 
     return (
@@ -56,9 +56,11 @@ export default function Profile() {
             {session ? (
                 <>
                     <h1 className={styles.title}>{`${user?.name}'s Profile`}</h1>
-                    <p className={styles.text}>Email: {user?.email}</p>
-                    <p className={styles.text}>Blood Type: {user?.bloodType}</p>
-                    <p className={styles.text}>Contact Number: {user?.contactNumber}</p>
+                    <div className={styles.infoContainer}>
+                        <p className={styles.text}><strong>Email:</strong> {user?.email}</p>
+                        <p className={styles.text}><strong>Blood Type:</strong> {user?.bloodType}</p>
+                        <p className={styles.text}><strong>Contact Number:</strong> {user?.contactNumber}</p>
+                    </div>
                     <button onClick={handleLogout} className={styles.logoutButton}>
                         Logout
                     </button>
@@ -68,4 +70,4 @@ export default function Profile() {
             )}
         </div>
     );
-}
+} 

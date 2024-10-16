@@ -5,20 +5,29 @@ import styles from './Notifications.module.css';
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
         const response = await fetch('/api/notifications');
+        if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
         setNotifications(data);
+        setLoading(false);
       } catch (error) {
-        console.error('Error fetching notifications:', error);
+        setError(error.message);
+        setLoading(false);
       }
     };
 
     fetchNotifications();
   }, []);
+
+  if (loading) return <div>Loading...</div>;
+
+  if (error) return <div>Error fetching notifications: {error}</div>;
 
   return (
     <div className={styles.notificationsContainer}>
