@@ -1,8 +1,8 @@
 "use client";
-
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; 
 import { useSearchParams } from 'next/navigation'; 
+import styles from './appointment-selection.module.css'; 
 
 const AppointmentSelectionPage = () => {
   const [profile, setProfile] = useState(null);
@@ -85,17 +85,20 @@ const AppointmentSelectionPage = () => {
   if (!profile) return <p>Loading...</p>;
 
   return (
-    <div>
-      <h2>Select Appointment</h2>
+    <div className={styles.appointmentSelectionContainer}>
+      <h2 className={styles.heading}>Select Appointment</h2>
       <form>
-        <p>Name: {profile.name}</p>
-        <p>Email: {profile.email}</p>
-        <p>Blood Type: {profile.bloodType}</p>
-        <p>Contact: {profile.contact}</p>
+        <div className={styles.profileInfo}>
+          <p className={styles.profileInfo}>Name: {profile.name}</p>
+          <p className={styles.profileInfo}>Email: {profile.email}</p>
+          <p className={styles.profileInfo}>Blood Type: {profile.bloodType}</p>
+          <p className={styles.profileInfo}>Contact: {profile.contact}</p>
+        </div>
 
-        <label htmlFor="date">Select Date:</label>
+        <label className={styles.label} htmlFor="date">Select Date:</label>
         <select
           id="date"
+          className={styles.select}
           value={selectedDate}
           onChange={(e) => setSelectedDate(e.target.value)}
         >
@@ -107,7 +110,7 @@ const AppointmentSelectionPage = () => {
           ))}
         </select>
 
-        <button type="button" onClick={handleSubmit}>Confirm Appointment</button>
+        <button type="button" className={styles.button} onClick={handleSubmit}>Confirm Appointment</button>
       </form>
     </div>
   );
